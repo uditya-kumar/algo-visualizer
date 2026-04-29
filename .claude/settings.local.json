@@ -1,0 +1,9 @@
+{
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "exa",
+    "context7",
+    "youtube",
+    "kaliLinux"
+  ]
+}
