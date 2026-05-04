@@ -34,9 +34,19 @@ src/
 
 ## Key Files
 
-- `src/lib/prompts.ts` - System prompt that instructs Claude how to generate visualization JSON
+- `src/lib/prompts.ts` - System prompts: DSA classifier + visualization generator
+- `src/lib/bedrock.ts` - AWS Bedrock client with DSA classification guardrail
 - `src/types/visualization.ts` - AlgoTrace, Step, Structure interfaces
 - `src/components/Visualizer.tsx` - Main visualizer with playback controls
+
+## Input Guardrail
+
+Before visualization, code is classified by Claude to check if it's DSA-related. Non-DSA code (web frameworks, API clients, ML code, etc.) is rejected with a user-friendly message.
+
+- `classifyCode()` in bedrock.ts - Returns `{isDSA: boolean, reason: string}`
+- `NotDSAError` - Custom error thrown when code is not DSA-related
+- API returns `{error: string, type: 'not_dsa'}` with 400 status for rejected code
+- UI shows amber warning with helpful suggestions for valid DSA topics
 
 ## Data Format
 

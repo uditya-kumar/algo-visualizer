@@ -45,7 +45,7 @@ export function ArrayView({ structure }: ArrayViewProps) {
 
           <div
             className={cn(
-              'w-10 h-10 flex items-center justify-center border rounded font-mono text-sm transition-colors',
+              'min-w-10 h-10 px-2 flex items-center justify-center border rounded font-mono text-sm transition-colors',
               cell.highlighted
                 ? 'bg-primary text-white border-primary'
                 : isInRange(structure, index)
@@ -69,6 +69,6 @@ function formatValue(value: unknown): string {
   if (typeof value === 'boolean') return value ? 'T' : 'F';
   if (typeof value === 'string') return value.length > 4 ? value.slice(0, 3) + '…' : value;
   if (typeof value === 'number') return String(value);
-  if (Array.isArray(value)) return '[…]';
+  if (Array.isArray(value)) return JSON.stringify(value);
   return String(value);
 }

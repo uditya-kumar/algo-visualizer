@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { CodeInput } from '@/components/CodeInput';
 import { Visualizer } from '@/components/Visualizer';
 import type { AlgoTrace } from '@/types/visualization';
-import { Code2, Sparkles } from 'lucide-react';
+import { Code2, Sparkles, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [trace, setTrace] = useState<AlgoTrace | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ message: string; type?: string } | null>(null);
 
   const handleVisualize = async (code: string) => {
     setLoading(true);
@@ -25,12 +25,14 @@ export default function Home() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate visualization');
+        setError({ message: data.error || 'Failed to generate visualization', type: data.type });
+        setTrace(null);
+        return;
       }
 
       setTrace(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError({ message: err instanceof Error ? err.message : 'Something went wrong' });
       setTrace(null);
     } finally {
       setLoading(false);
@@ -52,9 +54,17 @@ export default function Home() {
         ) : (
           <div className="flex flex-col items-center justify-center border rounded-lg bg-card text-muted-foreground">
             {error ? (
-              <div className="text-center p-8">
-                <div className="text-destructive font-medium mb-2">Error</div>
-                <p className="text-sm">{error}</p>
+              <div className="text-center p-8 max-w-md">
+                <AlertCircle className={`h-12 w-12 mx-auto mb-4 ${error.type === 'not_dsa' ? 'text-amber-500' : 'text-destructive'}`} />
+                <div className={`font-medium mb-2 ${error.type === 'not_dsa' ? 'text-amber-600' : 'text-destructive'}`}>
+                  {error.type === 'not_dsa' ? 'Not a DSA Problem' : 'Error'}
+                </div>
+                <p className="text-sm text-muted-foreground">{error.message}</p>
+                {error.type === 'not_dsa' && (
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Try algorithms like Two Sum, Binary Search, Merge Sort, BFS/DFS, or data structure operations.
+                  </p>
+                )}
               </div>
             ) : (
               <div className="text-center p-8">

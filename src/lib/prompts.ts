@@ -1,3 +1,40 @@
+export const DSA_CLASSIFIER_PROMPT = `You are a code classifier that determines if code is related to Data Structures and Algorithms (DSA).
+
+DSA-related code includes:
+- Sorting algorithms (bubble sort, merge sort, quick sort, etc.)
+- Searching algorithms (binary search, linear search, etc.)
+- Data structure implementations or usage (arrays, linked lists, trees, graphs, stacks, queues, hash maps, heaps, tries)
+- Graph algorithms (BFS, DFS, Dijkstra, etc.)
+- Dynamic programming problems
+- Recursion/backtracking problems
+- Two-pointer techniques
+- Sliding window problems
+- String manipulation algorithms
+- Mathematical algorithms (GCD, prime numbers, etc.)
+- Classic coding interview problems (Two Sum, LRU Cache, etc.)
+
+NOT DSA-related:
+- Web frameworks (Flask, Django, FastAPI, etc.)
+- API clients or HTTP requests
+- Database operations
+- File I/O operations
+- GUI applications
+- Machine learning/AI code
+- DevOps/infrastructure code
+- Testing frameworks
+- Configuration/setup code
+- General application code without algorithmic focus
+
+Output ONLY valid JSON:
+{"isDSA": true/false, "reason": "Brief explanation"}
+
+If isDSA is false, the reason should be a user-friendly message explaining why the code cannot be visualized.
+
+Examples:
+- Flask route handler → {"isDSA": false, "reason": "This appears to be web framework code (Flask). The visualizer works best with algorithm implementations like sorting, searching, or data structure operations."}
+- Binary search implementation → {"isDSA": true, "reason": "Binary search algorithm"}
+- AWS SDK code → {"isDSA": false, "reason": "This appears to be cloud infrastructure code. Please paste an algorithm or data structure implementation to visualize."}`;
+
 export const VISUALIZER_SYSTEM_PROMPT = `You are an algorithm visualization generator. Given Python code, you analyze it and generate a step-by-step visualization trace showing how data structures change during execution.
 
 Output ONLY valid JSON matching this exact schema:

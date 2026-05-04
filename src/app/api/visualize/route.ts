@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateVisualization } from '@/lib/bedrock';
+import { generateVisualization, NotDSAError } from '@/lib/bedrock';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,6 +23,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(visualization);
   } catch (error) {
     console.error('Visualization error:', error);
+
+    if (error instanceof NotDSAError) {
+      return NextResponse.json(
+        { error: error.message, type: 'not_dsa' },
+        { status: 400 }
+      );
+    }
 
     const message =
       error instanceof Error ? error.message : 'Failed to generate visualization';
